@@ -1,50 +1,66 @@
 <template>
-	<h1>Vue 3 and Fetch Example</h1>
+	<div
+		class="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8"
+	>
+		<div class="flex flex-col items-center justify-center w-full py-10">
+			<!-- search bar -->
 
-	<div class="flex items-center justify-center w-screen p-10">
-		<!-- Resice the preview panel to check the responsiveness -->
+			<div class="w-full pb-5">
+				<input
+					v-model="searchQuery"
+					@keyup.enter="fetchData()"
+					spellcheck="false"
+					type="text"
+					class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 mb-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+					placeholder="Find book by title"
+				/>
+			</div>
 
-		<!-- Component Start -->
-		<div
-			v-if="!loading && data && data.length"
-			class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 xl:max-w-6xl max-w-4xl"
-		>
-			<!-- Tile 1 -->
 			<div
-				v-for="book in data"
-				:key="book.id"
-				class="flex bg-gray-200 rounded-lg p-4 m-2"
+				v-if="!loading && data && data.length"
+				class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 xl:max-w-6xl max-w-4xl"
 			>
-				<div class="bg-gray-400 rounded-lg">
-					<img
-						v-if="book.volumeInfo.imageLinks"
-						:src="book.volumeInfo.imageLinks.smallThumbnail"
-						alt="book-cover"
-					/>
-					<img v-else src="../assets/placeholder-cover.jpg" alt="book-cover" />
-				</div>
-				<div class="flex flex-col items-start ml-4">
-					<h4 class="text-xl font-semibold text-left">
-						{{ book.volumeInfo.title }}
-					</h4>
-					<p class="text-sm text-left max-h-10 overflow-hidden">
-						Some text
-					</p>
-					<a
-						class="p-2 leading-none rounded font-medium mt-3 bg-gray-400 text-xs uppercase"
-						href="#"
-						>Click Here</a
-					>
+				<div
+					v-for="book in data"
+					:key="book.id"
+					class="flex bg-gray-200 rounded m-2"
+				>
+					<div class="bg-gray-400 rounded-lg">
+						<img
+							class="rounded"
+							v-if="book.volumeInfo.imageLinks"
+							:src="book.volumeInfo.imageLinks.smallThumbnail"
+							alt="book-cover"
+						/>
+						<img
+							v-else
+							class="rounded"
+							src="../assets/placeholder-cover.jpg"
+							alt="book-cover"
+						/>
+					</div>
+					<div class="flex flex-col items-start ml-4">
+						<h4 class="text-xl font-semibold text-left">
+							{{ book.volumeInfo.title }}
+						</h4>
+						<p class="text-sm text-left max-h-10 overflow-hidden">
+							Some text
+						</p>
+						<router-link
+							class="p-2 leading-none rounded font-medium mt-3 bg-gray-400 text-xs uppercase"
+							:to="'/book-details/' + book.id"
+							>Details</router-link
+						>
+					</div>
 				</div>
 			</div>
 		</div>
-		<!-- Component End  -->
-	</div>
 
-	<p v-if="loading">
-		Still loading..
-	</p>
-	<p v-if="error"></p>
+		<p v-if="loading">
+			Still loading..
+		</p>
+		<p v-if="error"></p>
+	</div>
 </template>
 
 <script>
@@ -56,13 +72,16 @@ export default {
 		const data = ref(null);
 		const loading = ref(true);
 		const error = ref(null);
+		const searchQuery = ref("The hobbit");
 
 		function fetchData() {
 			loading.value = true;
 			// I prefer to use fetch
 			// you can use use axios as an alternative
 			return fetch(
-				"https://www.googleapis.com/books/v1/volumes?q=flowers+inauthor:keyes&key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0",
+				"https://www.googleapis.com/books/v1/volumes?q=" +
+					searchQuery.value +
+					"&key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0",
 				{
 					method: "get",
 					headers: {
@@ -111,6 +130,8 @@ export default {
 			data,
 			loading,
 			error,
+			searchQuery,
+			fetchData,
 		};
 	},
 };
