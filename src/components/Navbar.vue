@@ -33,38 +33,29 @@
 				<ul class="flex items-center hidden space-x-8 lg:flex">
 					<li>
 						<router-link
-							to="/welcome"
+							to="/"
 							aria-label="Our product"
 							title="Our product"
 							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-							>Welcome</router-link
+							>Home</router-link
+						>
+					</li>
+					<li>
+						<router-link
+							to="/explore"
+							aria-label="explore"
+							title="Explore all books"
+							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+							>Explore</router-link
 						>
 					</li>
 					<li>
 						<a
-							href="/"
-							aria-label="Our product"
-							title="Our product"
-							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-							>Features</a
-						>
-					</li>
-					<li>
-						<a
-							href="/"
+							href="/communities"
 							aria-label="Product pricing"
 							title="Product pricing"
-							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-							>Pricing</a
-						>
-					</li>
-					<li>
-						<a
-							href="/"
-							aria-label="About us"
-							title="About us"
-							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-							>About us</a
+							class="font-medium tracking-wide text-gray-200 transition-colors duration-200 hover:text-deep-purple-accent-400"
+							>Communities (soon)</a
 						>
 					</li>
 				</ul>
@@ -185,15 +176,6 @@
 								<li>
 									<a
 										href="/"
-										aria-label="About us"
-										title="About us"
-										class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-										>About us</a
-									>
-								</li>
-								<li>
-									<a
-										href="/"
 										aria-label="Sign in"
 										title="Sign in"
 										class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
@@ -233,4 +215,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.router-link-exact-active {
+	color: #42b983 !important;
+}
+</style>

@@ -4,6 +4,7 @@ import Welcome from "../views/Welcome.vue";
 import Login from "../views/auth/Login.vue";
 import Signup from "../views/auth/Signup.vue";
 import BookDetails from "../views/BookDetails.vue";
+import Explore from "../views/Explore.vue";
 import { projectAuth } from "../firebase/config";
 
 // auth guard function
@@ -55,6 +56,12 @@ const routes = [
 		path: "/",
 		name: "Home",
 		component: Home,
+		beforeEnter: requireAuth,
+	},
+	{
+		path: "/explore",
+		name: "Explore",
+		component: Explore,
 		beforeEnter: requireAuth,
 	},
 	{

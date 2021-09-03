@@ -1,22 +1,23 @@
 <template>
-	<navbar />
+	<navbar v-if="user" />
 	<router-view />
 </template>
 
 <script>
 import Navbar from "@/components/Navbar.vue";
+import getUser from "./composables/getUser";
 
 export default {
 	name: "App",
 	components: {
 		Navbar,
 	},
-	setup() {},
+	setup() {
+		const { user } = getUser();
+
+		return { user };
+	},
 };
 </script>
 
-<style>
-#nav a.router-link-exact-active {
-	color: #42b983;
-}
-</style>
+<style></style>

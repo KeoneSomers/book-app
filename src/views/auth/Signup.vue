@@ -6,34 +6,28 @@
 		<input type="password" placeholder="Password" v-model="password" />
 		<div v-if="error" class="error">{{ error }}</div>
 		<button v-if="!isPending">Sign up</button>
-		<button v-if="isPending" disabled>Loading</button>
+		<button v-else disabled>Loading</button>
 	</form>
 </template>
 
-<script>
+<script setup>
 import useSignup from "@/composables/useSignup";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-export default {
-	setup() {
-		// variables
-		const { error, signup, isPending } = useSignup();
-		const email = ref("");
-		const password = ref("");
-		const displayName = ref("");
-		const router = useRouter();
+// variables
+const { error, signup, isPending } = useSignup();
+const email = ref("");
+const password = ref("");
+const displayName = ref("");
+const router = useRouter();
 
-		// functions
-		const handleSubmit = async () => {
-			const res = await signup(email.value, password.value, displayName.value);
-			if (!error.value) {
-				console.log("user signed up");
-				router.push({ name: "Home" });
-			}
-		};
-
-		return { email, password, displayName, handleSubmit, error, isPending };
-	},
+// functions
+const handleSubmit = async () => {
+	const res = await signup(email.value, password.value, displayName.value);
+	if (!error.value) {
+		console.log("user signed up");
+		router.push({ name: "Home" });
+	}
 };
 </script>

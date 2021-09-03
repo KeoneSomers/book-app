@@ -1,66 +1,64 @@
 <template>
-	<div
-		class="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8"
-	>
-		<div class="flex flex-col items-center justify-center w-full py-10">
-			<!-- search bar -->
+	<div class="flex flex-col items-center justify-center w-full py-10">
+		<!-- search bar -->
 
-			<div class="w-full pb-5">
+		<div class="flex w-full pb-5 justify-center">
+			<div>
 				<input
 					v-model="searchQuery"
 					@keyup.enter="fetchData()"
 					spellcheck="false"
 					type="text"
-					class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 mb-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+					class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-max-100 py-2 mb-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
 					placeholder="Find book by title"
 				/>
 			</div>
+		</div>
 
+		<div
+			v-if="!loading && data && data.length"
+			class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 xl:max-w-6xl max-w-4xl"
+		>
 			<div
-				v-if="!loading && data && data.length"
-				class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 xl:max-w-6xl max-w-4xl"
+				v-for="book in data"
+				:key="book.id"
+				class="flex shadow rounded bg-white overflow-hidden m-2"
 			>
-				<div
-					v-for="book in data"
-					:key="book.id"
-					class="flex bg-gray-200 rounded m-2"
-				>
-					<div class="bg-gray-400 rounded-lg">
-						<img
-							class="rounded"
-							v-if="book.volumeInfo.imageLinks"
-							:src="book.volumeInfo.imageLinks.smallThumbnail"
-							alt="book-cover"
-						/>
-						<img
-							v-else
-							class="rounded"
-							src="../assets/placeholder-cover.jpg"
-							alt="book-cover"
-						/>
-					</div>
-					<div class="flex flex-col items-start ml-4">
-						<h4 class="text-xl font-semibold text-left">
-							{{ book.volumeInfo.title }}
-						</h4>
-						<p class="text-sm text-left max-h-10 overflow-hidden">
-							Some text
-						</p>
-						<router-link
-							class="p-2 leading-none rounded font-medium mt-3 bg-gray-400 text-xs uppercase"
-							:to="'/book-details/' + book.id"
-							>Details</router-link
-						>
-					</div>
+				<div>
+					<img
+						class="rounded w-md:h-auto min-w-30 max-w-30"
+						v-if="book.volumeInfo.imageLinks"
+						:src="book.volumeInfo.imageLinks.smallThumbnail"
+						alt="book-cover"
+					/>
+					<img
+						v-else
+						class="rounded w-md:h-auto min-w-30 max-w-30"
+						src="../assets/placeholder-cover.jpg"
+						alt="book-cover"
+					/>
+				</div>
+				<div class="flex flex-col items-start ml-4">
+					<h4 class="text-xl font-semibold text-left">
+						{{ book.volumeInfo.title }}
+					</h4>
+					<p class="text-sm text-left max-h-10 overflow-hidden">
+						Some text
+					</p>
+					<router-link
+						class="p-2 leading-none rounded font-medium mt-3 bg-gray-400 text-xs uppercase"
+						:to="'/book-details/' + book.id"
+						>Details</router-link
+					>
 				</div>
 			</div>
 		</div>
-
-		<p v-if="loading">
-			Still loading..
-		</p>
-		<p v-if="error"></p>
 	</div>
+
+	<p v-if="loading">
+		Still loading..
+	</p>
+	<p v-if="error"></p>
 </template>
 
 <script>
