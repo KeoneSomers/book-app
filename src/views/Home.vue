@@ -6,7 +6,7 @@
 			{{ timeOfDay }}, {{ user.displayName }}
 		</h1>
 		<hr class="my-6" />
-		<div class="flex flex-row space-x-5">
+		<div class="flex flex-row md:space-x-5">
 			<CurrentlyReading />
 			<ReadingGoal />
 		</div>

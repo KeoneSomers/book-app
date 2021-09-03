@@ -6,7 +6,8 @@
 			🎯 Yearly Goal
 		</p>
 		<p v-if="daysLeftInYear" class="text-gray-400 text-xs">
-			{{ daysLeftInYear }} days left
+			{{ daysLeftInYear }} day<span v-if="daysLeftInYear != 1">s</span>
+			remaining
 		</p>
 		<div class="flex items-center justify-between my-2">
 			<p class="text-gray-300 text-sm">

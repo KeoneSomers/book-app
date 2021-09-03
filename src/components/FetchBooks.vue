@@ -45,11 +45,19 @@
 					<p class="text-sm text-left max-h-10 overflow-hidden">
 						Some text
 					</p>
-					<router-link
-						class="p-2 leading-none rounded font-medium mt-3 bg-gray-400 text-xs uppercase"
-						:to="'/book-details/' + book.id"
-						>Details</router-link
-					>
+					<div class="flex flex-row space-x-1">
+						<router-link
+							class="p-2 leading-none rounded font-medium mt-3 bg-gray-200 text-xs uppercase"
+							:to="'/book-details/' + book.id"
+							>Details</router-link
+						>
+						<button
+							@click="addBookToCollection"
+							class="p-2 leading-none rounded font-medium mt-3 bg-yellow-200 text-xs uppercase"
+						>
+							Add to collection
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -71,6 +79,19 @@ export default {
 		const loading = ref(true);
 		const error = ref(null);
 		const searchQuery = ref("The hobbit");
+
+		const addBookToCollection = () => {
+			// add a book to the collection (later this will be add to "My List", "Read Later", "Finished")
+
+			// id
+			// book id
+			// user id
+			// isFinished
+			// isReadLater
+			// isReading
+
+			console.log("add book to collection");
+		};
 
 		function fetchData() {
 			loading.value = true;
@@ -130,6 +151,7 @@ export default {
 			error,
 			searchQuery,
 			fetchData,
+			addBookToCollection,
 		};
 	},
 };
