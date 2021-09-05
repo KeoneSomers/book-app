@@ -52,7 +52,7 @@
 							>Details</router-link
 						>
 						<button
-							@click="addBookToCollection"
+							@click="addBookToCollection(book)"
 							class="p-2 leading-none rounded font-medium mt-3 bg-yellow-200 text-xs uppercase"
 						>
 							Add to collection
@@ -66,31 +66,39 @@
 	<p v-if="loading">
 		Still loading..
 	</p>
-	<p v-if="error"></p>
+	<p v-if="fetchError">{{ fetchError }}</p>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
+import getUser from "../composables/getUser";
+import useCollection from "../composables/useCollection";
+
 export default {
 	name: "Posts",
 	props: {},
 	setup() {
 		const data = ref(null);
 		const loading = ref(true);
-		const error = ref(null);
+		const fetchError = ref(null);
 		const searchQuery = ref("The hobbit");
+		const { user } = getUser();
+		const { addDoc, error } = useCollection("usersBooksRecords");
 
-		const addBookToCollection = () => {
+		const addBookToCollection = async (book) => {
 			// add a book to the collection (later this will be add to "My List", "Read Later", "Finished")
+			const bookRecord = {
+				bookId: book.id,
+				userId: user.value.uid,
+				isFinished: false,
+				isReadLater: false,
+				isReading: false,
+			};
 
-			// id
-			// book id
-			// user id
-			// isFinished
-			// isReadLater
-			// isReading
-
-			console.log("add book to collection");
+			await addDoc(bookRecord);
+			if (!error.value) {
+				console.log("added book to collection!");
+			}
 		};
 
 		function fetchData() {
@@ -112,10 +120,10 @@ export default {
 					// a non-200 response code
 					if (!res.ok) {
 						// create error instance with HTTP status text
-						const error = new Error(res.statusText);
+						const fetchError = new fetchError(res.statusText);
 						console.log(error.message);
-						error.json = res.json();
-						throw error;
+						fetchError.json = res.json();
+						throw fetchError;
 					}
 
 					return res.json();
@@ -126,13 +134,13 @@ export default {
 					console.log(json);
 				})
 				.catch((err) => {
-					error.value = err;
+					fetchError.value = err;
 					console.log(err);
 					// In case a custom JSON error response was provided
 					if (err.json) {
 						return err.json.then((json) => {
 							// set the JSON response message
-							error.value.message = json.message;
+							fetchError.value.message = json.message;
 						});
 					}
 				})
@@ -148,7 +156,7 @@ export default {
 		return {
 			data,
 			loading,
-			error,
+			fetchError,
 			searchQuery,
 			fetchData,
 			addBookToCollection,
