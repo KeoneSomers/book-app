@@ -132,6 +132,16 @@ export default {
 					// set the response data
 					data.value = json.items;
 					console.log(json);
+
+					// compare each result with users collection of books (so uses wont be able to add books they already have)
+					// Get id's of each book in results
+					Array.from(data.value).forEach((element) => {
+						console.log(element.id);
+						// check firestore for record matching bookid and userid (can't use conposable since it takes 2 arguments)
+						// if null then do nothing
+						//  if not null then modify data.value[i] to have a property "isInCollection" (may need to use a computed variable to do this)
+						// finally, in the DOM, add a class to the book element to show if it is in the collection
+					});
 				})
 				.catch((err) => {
 					fetchError.value = err;
