@@ -73,6 +73,7 @@
 import { ref, onMounted } from "vue";
 import getUser from "../composables/getUser";
 import useCollection from "../composables/useCollection";
+import axios from "axios";
 
 export default {
 	name: "Posts",
@@ -103,58 +104,23 @@ export default {
 
 		function fetchData() {
 			loading.value = true;
-			// I prefer to use fetch
-			// you can use use axios as an alternative
-			return fetch(
-				"https://www.googleapis.com/books/v1/volumes?q=" +
-					searchQuery.value +
-					"&key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0",
-				{
-					method: "get",
-					headers: {
-						"content-type": "application/json",
-					},
-				}
-			)
-				.then((res) => {
-					// a non-200 response code
-					if (!res.ok) {
-						// create error instance with HTTP status text
-						const fetchError = new fetchError(res.statusText);
-						console.log(error.message);
-						fetchError.json = res.json();
-						throw fetchError;
-					}
 
-					return res.json();
+			return axios
+				.get(
+					"https://www.googleapis.com/books/v1/volumes?q=" +
+						searchQuery.value +
+						"&key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0"
+				)
+				.then(function(response) {
+					// handle success
+					data.value = response.data.items;
 				})
-				.then((json) => {
-					// set the response data
-					data.value = json.items;
-					console.log(json);
-
-					// compare each result with users collection of books (so uses wont be able to add books they already have)
-					// Get id's of each book in results
-					Array.from(data.value).forEach((element) => {
-						console.log(element.id);
-						// check firestore for record matching bookid and userid (can't use conposable since it takes 2 arguments)
-						// if null then do nothing
-						//  if not null then modify data.value[i] to have a property "isInCollection" (may need to use a computed variable to do this)
-						// finally, in the DOM, add a class to the book element to show if it is in the collection
-					});
+				.catch(function(err) {
+					// handle error
+					fetchError.value = err.message;
 				})
-				.catch((err) => {
-					fetchError.value = err;
-					console.log(err);
-					// In case a custom JSON error response was provided
-					if (err.json) {
-						return err.json.then((json) => {
-							// set the JSON response message
-							fetchError.value.message = json.message;
-						});
-					}
-				})
-				.then(() => {
+				.then(function() {
+					// always executed
 					loading.value = false;
 				});
 		}
