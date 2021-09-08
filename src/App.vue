@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
 import getUser from "./composables/getUser";
+import Navbar from "@/components/Navbar.vue";
 
 export default {
 	name: "App",
@@ -14,12 +14,9 @@ export default {
 	},
 	setup() {
 		const { user } = getUser();
-
-		console.log(user.value.uid);
+		// console.log(user);
 
 		return { user };
 	},
 };
 </script>
-
-<style></style>

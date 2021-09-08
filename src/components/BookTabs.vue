@@ -20,7 +20,9 @@
 		</p>
 	</div>
 
-	<button @click="fetchData()">testingggg</button>
+	<button @click="getData()">Get Data</button>
+
+	<button @click="addData()">Post Data</button>
 
 	<div v-if="data" class="bg-blue">{{ data }}</div>
 </template>
@@ -35,37 +37,51 @@ export default {
 		const loading = ref(true);
 		const fetchError = ref(null);
 
-		function fetchData() {
-			loading.value = true;
-
-			return axios({
+		async function getData() {
+			var result = await axios({
+				method: "POST",
 				url: "https://book-app-db-api.herokuapp.com/graphql",
-				method: "post",
 				data: {
 					query: `
-      mutation {
-  createUserBook(data: {bookId: "my book work ingggggkjge", userId: "test user"}) {
-    userId
-  }
-}
-      `,
+                            {
+								allUserBooks {
+									userId
+								}
+							}
+                        `,
 				},
-			})
-				.catch(function(err) {
-					// handle error
-					fetchError.value = err.message;
-				})
-				.then(function() {
-					// always executed
-					loading.value = false;
-				});
+			});
+			data.value = result.data.data.allUserBooks;
+		}
+
+		async function addData() {
+			var result = await axios({
+				method: "POST",
+				url: "https://book-app-db-api.herokuapp.com/graphql",
+				data: {
+					query: `
+                            mutation 
+								createUserBook(
+									data: {
+										bookId: "my book",
+										userId: "test user"
+										}
+									){
+									userId
+								}
+							
+                        `,
+				},
+			});
+			console.log(result);
 		}
 
 		return {
 			data,
 			loading,
 			fetchError,
-			fetchData,
+			getData,
+			addData,
 		};
 	},
 };
