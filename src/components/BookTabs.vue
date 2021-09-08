@@ -19,8 +19,56 @@
 			and keep track of them to your collection!
 		</p>
 	</div>
+
+	<button @click="fetchData()">testingggg</button>
+
+	<div v-if="data" class="bg-blue">{{ data }}</div>
 </template>
 
-<script></script>
+<script>
+import { ref } from "vue";
+import axios from "axios";
+
+export default {
+	setup() {
+		const data = ref(null);
+		const loading = ref(true);
+		const fetchError = ref(null);
+
+		function fetchData() {
+			loading.value = true;
+
+			return axios({
+				url: "https://book-app-db-api.herokuapp.com/graphql",
+				method: "post",
+				data: {
+					query: `
+      mutation {
+  createUserBook(data: {bookId: "my book work ingggggkjge", userId: "test user"}) {
+    userId
+  }
+}
+      `,
+				},
+			})
+				.catch(function(err) {
+					// handle error
+					fetchError.value = err.message;
+				})
+				.then(function() {
+					// always executed
+					loading.value = false;
+				});
+		}
+
+		return {
+			data,
+			loading,
+			fetchError,
+			fetchData,
+		};
+	},
+};
+</script>
 
 <style></style>
