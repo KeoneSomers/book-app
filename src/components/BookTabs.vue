@@ -20,15 +20,11 @@
 		</p>
 	</div>
 
-	<button @click="getData()">Get Data</button>
-
-	<button @click="addBookToCollection()">Post Data</button>
-
 	<div v-if="data" class="bg-blue">{{ data }}</div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 
 export default {
@@ -54,34 +50,15 @@ export default {
 			data.value = result.data.data.allUserBooks;
 		}
 
-		async function addBookToCollection() {
-			var result = await axios({
-				method: "POST",
-				url: "https://book-app-db-api.herokuapp.com/graphql",
-				data: {
-					query: `
-							mutation {
-							createUserBook(
-									data: {
-										bookId: "grgegg",
-										userId: "streece"
-										}
-									){
-									userId
-								}
-							}
-					`,
-				},
-			});
-			console.log(result);
-		}
+		onMounted(() => {
+			getData();
+		});
 
 		return {
 			data,
 			loading,
 			fetchError,
 			getData,
-			addBookToCollection,
 		};
 	},
 };
