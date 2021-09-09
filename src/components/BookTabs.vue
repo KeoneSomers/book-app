@@ -60,17 +60,17 @@ export default {
 				url: "https://book-app-db-api.herokuapp.com/graphql",
 				data: {
 					query: `
-                            mutation 
-								createUserBook(
+							mutation {
+							createUserBook(
 									data: {
-										bookId: "my book",
-										userId: "test user"
+										bookId: "grgegg",
+										userId: "streece"
 										}
 									){
 									userId
 								}
-							
-                        `,
+							}
+					`,
 				},
 			});
 			console.log(result);
