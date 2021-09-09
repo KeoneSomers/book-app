@@ -22,7 +22,7 @@
 
 	<button @click="getData()">Get Data</button>
 
-	<button @click="addData()">Post Data</button>
+	<button @click="addBookToCollection()">Post Data</button>
 
 	<div v-if="data" class="bg-blue">{{ data }}</div>
 </template>
@@ -54,7 +54,7 @@ export default {
 			data.value = result.data.data.allUserBooks;
 		}
 
-		async function addData() {
+		async function addBookToCollection() {
 			var result = await axios({
 				method: "POST",
 				url: "https://book-app-db-api.herokuapp.com/graphql",
@@ -81,7 +81,7 @@ export default {
 			loading,
 			fetchError,
 			getData,
-			addData,
+			addBookToCollection,
 		};
 	},
 };

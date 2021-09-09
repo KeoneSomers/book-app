@@ -86,20 +86,42 @@ export default {
 		const { user } = getUser();
 		const { addDoc, error } = useCollection("usersBooksRecords");
 
-		const addBookToCollection = async (book) => {
-			// add a book to the collection (later this will be add to "My List", "Read Later", "Finished")
-			const bookRecord = {
-				bookId: book.id,
-				userId: user.value.uid,
-				isFinished: false,
-				isReadLater: false,
-				isReading: false,
-			};
+		// const addBookToCollection = async (book) => {
+		// 	// add a book to the collection (later this will be add to "My List", "Read Later", "Finished")
+		// 	const bookRecord = {
+		// 		bookId: book.id,
+		// 		userId: user.value.uid,
+		// 		isFinished: false,
+		// 		isReadLater: false,
+		// 		isReading: false,
+		// 	};
 
-			await addDoc(bookRecord);
-			if (!error.value) {
-				console.log("added book to collection!");
-			}
+		// 	await addDoc(bookRecord);
+		// 	if (!error.value) {
+		// 		console.log("added book to collection!");
+		// 	}
+		// };
+
+		const addBookToCollection = async (book) => {
+			const result = await axios({
+				method: "POST",
+				url: "https://book-app-db-api.herokuapp.com/graphql",
+				data: {
+					query: `
+							mutation {
+							createUserBook(
+									data: {
+										bookId: "${book.id}",
+										userId: "${user.value.uid}"
+										}
+									){
+									userId
+								}
+							}
+					`,
+				},
+			});
+			console.log(result);
 		};
 
 		function fetchData() {
