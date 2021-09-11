@@ -20,11 +20,16 @@
 		</p>
 	</div>
 
-	<div v-if="data" class="bg-blue">{{ data }}</div>
+	<pre v-if="data" class="bg-light-600 mt-5 px-5 rounded-xl">
+		<code>
+{{ data }}
+		</code>
+	</pre>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
+import getUser from "../composables/getUser";
 import axios from "axios";
 
 export default {
@@ -32,22 +37,30 @@ export default {
 		const data = ref(null);
 		const loading = ref(true);
 		const fetchError = ref(null);
+		const { user } = getUser();
 
 		async function getData() {
+			console.log(user.value.uid);
 			var result = await axios({
 				method: "POST",
 				url: "https://book-app-db-api.herokuapp.com/graphql",
 				data: {
 					query: `
                             {
-								allUserBooks {
-									userId
+								getUserBooks(userId: "${user.value.uid}")
+								{
+									id,
+									userId,
+									bookId
+									isReadLater,
+									isReading
 								}
 							}
                         `,
 				},
 			});
-			data.value = result.data.data.allUserBooks;
+			console.log(user.value.uid);
+			data.value = result.data.data.getUserBooks;
 		}
 
 		onMounted(() => {
@@ -59,6 +72,7 @@ export default {
 			loading,
 			fetchError,
 			getData,
+			user,
 		};
 	},
 };
