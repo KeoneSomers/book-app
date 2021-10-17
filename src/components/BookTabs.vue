@@ -13,18 +13,12 @@
 		<p class="text-center">
 			Visit the
 			<router-link class="text-blue-600 underline font-bold" to="/explore"
-				>Explore tab</router-link
+				>Explore tab Test</router-link
 			>
 			to find books<br />
 			and keep track of them to your collection!
 		</p>
 	</div>
-
-	<pre v-if="data" class="bg-light-600 mt-5 px-5 rounded-xl">
-		<code>
-{{ data }}
-		</code>
-	</pre>
 </template>
 
 <script>
@@ -39,43 +33,14 @@ export default {
 		const fetchError = ref(null);
 		const { user } = getUser();
 
-		async function getData() {
-			console.log(user.value.uid);
-			var result = await axios({
-				method: "POST",
-				url: "https://book-app-db-api.herokuapp.com/graphql",
-				data: {
-					query: `
-                            {
-								getUserBooks(userId: "${user.value.uid}")
-								{
-									id,
-									userId,
-									bookId
-									isReadLater,
-									isReading
-								}
-							}
-                        `,
-				},
-			});
-			console.log(user.value.uid);
-			data.value = result.data.data.getUserBooks;
-		}
-
-		onMounted(() => {
-			getData();
-		});
+		onMounted(() => {});
 
 		return {
 			data,
 			loading,
 			fetchError,
-			getData,
 			user,
 		};
 	},
 };
 </script>
-
-<style></style>

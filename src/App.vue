@@ -14,8 +14,6 @@ export default {
 	},
 	setup() {
 		const { user } = getUser();
-		// console.log(user);
-
 		return { user };
 	},
 };

@@ -5,12 +5,12 @@ import Login from "../views/auth/Login.vue";
 import Signup from "../views/auth/Signup.vue";
 import BookDetails from "../views/BookDetails.vue";
 import Explore from "../views/Explore.vue";
-import { projectAuth } from "../firebase/config";
+import { auth } from "../firebase/config";
 
 // auth guard function
 const requireAuth = (to, from, next) => {
 	// get current user
-	let user = projectAuth.currentUser;
+	let user = auth.currentUser;
 
 	if (!user) {
 		// if we don't have a user, redirect them to login
@@ -23,7 +23,7 @@ const requireAuth = (to, from, next) => {
 
 const requireNoAuth = (to, from, next) => {
 	// get current user
-	let user = projectAuth.currentUser;
+	let user = auth.currentUser;
 	if (user) {
 		// if we have a user, redirect them to the personal page
 		next({ name: "Home" });

@@ -1,11 +1,11 @@
 import { ref } from "vue";
-import { projectAuth } from "../firebase/config";
+import { auth } from "../firebase/config";
 
 // refs
-const user = ref(projectAuth.currentUser);
+const user = ref(auth.currentUser);
 
 // auth changes
-projectAuth.onAuthStateChanged((_user) => {
+auth.onAuthStateChanged((_user) => {
 	user.value = _user;
 });
 

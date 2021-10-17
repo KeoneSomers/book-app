@@ -26,7 +26,6 @@ const router = useRouter();
 const handleSubmit = async () => {
 	const res = await signup(email.value, password.value, displayName.value);
 	if (!error.value) {
-		console.log("user signed up");
 		router.push({ name: "Home" });
 	}
 };

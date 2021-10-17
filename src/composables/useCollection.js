@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { projectFirestore } from "../firebase/config";
+import { db } from "../firebase/config";
 
 const useCollection = (collection) => {
 	const error = ref(null);
@@ -11,7 +11,7 @@ const useCollection = (collection) => {
 		isPending.value = true;
 
 		try {
-			await projectFirestore.collection(collection).add(doc);
+			await db.collection(collection).add(doc);
 			isPending.value = false;
 		} catch (err) {
 			console.log(err.message);

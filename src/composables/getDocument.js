@@ -1,12 +1,12 @@
 import { watchEffect, ref } from "vue";
-import { projectFirestore } from "../firebase/config";
+import { db } from "../firebase/config";
 
 const getDocument = (collection, id) => {
 	let document = ref(null);
 	let error = ref(null);
 
 	// register the firestore collection reference
-	let documentRef = projectFirestore.collection(collection).doc(id);
+	let documentRef = db.collection(collection).doc(id);
 
 	const unsub = documentRef.onSnapshot(
 		(doc) => {

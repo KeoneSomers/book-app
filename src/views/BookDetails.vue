@@ -36,8 +36,6 @@ export default {
 
 		onMounted(() => {
 			loading.value = true;
-			// I prefer to use fetch
-			// you can use use axios as an alternative
 			return fetch(
 				"https://www.googleapis.com/books/v1/volumes/" +
 					route.params.id +
