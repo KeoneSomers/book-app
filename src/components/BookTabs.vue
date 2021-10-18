@@ -19,12 +19,19 @@
 			and keep track of them to your collection!
 		</p>
 	</div>
+
+	<!-- prettier-ignore -->
+	<pre class="bg-light-200 mt-10 p-10 rounded-lg">
+<code>{{ data }}</code>
+</pre
+	>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import getUser from "../composables/getUser";
-import axios from "axios";
+import { db } from "../firebase/config";
+import { collection, onSnapshot } from "firebase/firestore";
 
 export default {
 	setup() {
@@ -33,7 +40,40 @@ export default {
 		const fetchError = ref(null);
 		const { user } = getUser();
 
-		onMounted(() => {});
+		onMounted(() => {
+			getUserBookRecords();
+		});
+
+		// GET Collection - user's book records [TODO: only get back results with users uid and add pagination]
+		async function getUserBookRecords() {
+			let results = [];
+			const unsub = onSnapshot(
+				collection(db, "usersBooksRecords"),
+				(snapshot) => {
+					snapshot.docs.forEach((doc) => {
+						results.push({ ...doc.data(), id: doc.id });
+					});
+
+					data.value = results;
+				},
+				(error) => {
+					console.log("Error: ", error);
+				}
+			);
+
+			// Clean up magic
+			watchEffect((onInvalidate) => {
+				onInvalidate(() => unsub());
+			});
+		}
+
+		// Get Single Doc
+
+		// Add
+
+		// Delete
+
+		// Update
 
 		return {
 			data,
