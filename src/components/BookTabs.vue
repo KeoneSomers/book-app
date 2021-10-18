@@ -12,8 +12,12 @@
 			class="w-40 h-60 bg-dark-200 hover:cursor-pointer overflow-hidden"
 		>
 			<img
+				v-if="bookData.length > 0"
 				class="w-full"
-				src="https://www.amazon.co.uk/images/I/51-nXsSRfZL._SY291_BO1,204,203,200_QL40_ML2_.jpg"
+				:src="
+					bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
+						.smallThumbnail
+				"
 				alt="Title"
 			/>
 		</div>
@@ -24,6 +28,9 @@
 <code>{{ data }}</code>
 </pre
 	>
+	<pre class="bg-light-200 mt-10 p-10 rounded-lg overflow-x-scroll">
+<code>{{ bookData }}</code>
+</pre>
 </template>
 
 <script>
@@ -40,7 +47,8 @@ import {
 
 export default {
 	setup() {
-		const data = ref(null);
+		const data = ref([]);
+		const bookData = ref([]);
 		const loading = ref(true);
 		const fetchError = ref(null);
 		const { user } = getUser();
@@ -80,8 +88,6 @@ export default {
 		// GET - user's book records
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		async function getUsersBookRecords() {
-			let results = [];
-
 			const q = query(
 				collection(db, "usersBooksRecords"),
 				where("userId", "==", user.value.uid)
@@ -90,11 +96,29 @@ export default {
 			const querySnapshot = await getDocs(q);
 			querySnapshot.forEach((doc) => {
 				console.log(doc.id, " => ", doc.data());
-				results.push({ ...doc.data(), id: doc.id });
-			});
+				data.value.push({
+					...doc.data(),
+					id: doc.id,
+				});
 
-			data.value = results;
-			console.log(data.value);
+				// GetBookByBookId
+				const axios = require("axios");
+				const googleBooksAPIKey = "AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0";
+
+				axios
+					.get(
+						"https://www.googleapis.com/books/v1/volumes/" +
+							doc.data().bookId +
+							"?key=" +
+							googleBooksAPIKey
+					)
+					.then(function(response) {
+						bookData.value.push(response.data);
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			});
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +139,7 @@ export default {
 
 		return {
 			data,
+			bookData,
 			loading,
 			fetchError,
 			user,
