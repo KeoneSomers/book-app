@@ -9,7 +9,7 @@
 		<div
 			v-for="item in data"
 			:key="item.id"
-			class="relative group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden"
+			class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden"
 		>
 			<img
 				v-if="bookData.find((x) => x.id == item.bookId)"
@@ -21,6 +21,7 @@
 				alt="Title"
 			/>
 			<span
+				title="Remove Book"
 				class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
 			>
 				X
