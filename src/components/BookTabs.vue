@@ -12,7 +12,7 @@
 			class="w-40 h-60 bg-dark-200 hover:cursor-pointer overflow-hidden"
 		>
 			<img
-				v-if="bookData.length > 0"
+				v-if="bookData.find((x) => x.id == item.bookId)"
 				class="w-full"
 				:src="
 					bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
@@ -95,7 +95,6 @@ export default {
 
 			const querySnapshot = await getDocs(q);
 			querySnapshot.forEach((doc) => {
-				console.log(doc.id, " => ", doc.data());
 				data.value.push({
 					...doc.data(),
 					id: doc.id,
