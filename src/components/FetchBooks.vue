@@ -72,34 +72,30 @@
 <script>
 import { ref, onMounted } from "vue";
 import getUser from "../composables/getUser";
-import useCollection from "../composables/useCollection";
 import axios from "axios";
+import { db } from "../firebase/config";
+import { collection, addDoc } from "firebase/firestore";
 
 export default {
 	name: "Posts",
 	props: {},
 	setup() {
 		const data = ref(null);
+		const booksAlreadyInCollection = ref([]);
+
 		const loading = ref(true);
 		const fetchError = ref(null);
 		const searchQuery = ref("The hobbit");
 		const { user } = getUser();
-		const { addDoc, error } = useCollection("usersBooksRecords");
 
 		const addBookToCollection = async (book) => {
-			// add a book to the collection (later this will be add to "My List", "Read Later", "Finished")
-			const bookRecord = {
+			await addDoc(collection(db, "usersBooksRecords"), {
 				bookId: book.id,
 				userId: user.value.uid,
 				isFinished: false,
 				isReadLater: false,
 				isReading: false,
-			};
-
-			await addDoc(bookRecord);
-			if (!error.value) {
-				console.log("added book to collection!");
-			}
+			});
 		};
 
 		function fetchData() {
