@@ -9,17 +9,22 @@
 		<div
 			v-for="item in data"
 			:key="item.id"
-			class="w-40 h-60 bg-dark-200 hover:cursor-pointer overflow-hidden"
+			class="relative group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden"
 		>
 			<img
 				v-if="bookData.find((x) => x.id == item.bookId)"
-				class="w-full"
+				class="w-full group-hover:opacity-50 transition"
 				:src="
 					bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
 						.smallThumbnail
 				"
 				alt="Title"
 			/>
+			<span
+				class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
+			>
+				X
+			</span>
 		</div>
 	</div>
 
