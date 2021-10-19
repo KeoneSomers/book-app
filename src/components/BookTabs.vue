@@ -1,31 +1,44 @@
 <template>
 	<hr class="mt-6" />
 
+	<!-- Currently Reading -->
+	<!-- finished -->
+	<!-- TBR -->
+	<!-- Wishlist -->
+
 	<!-- super cool bookshelf -->
-	<h3 class="mb-5 mt-10 font-bold">My Reading List</h3>
-	<div
-		class="bg-light-200 w-full p-5 flex flex-row md:space-x-5 rounded overflow-x-auto"
-	>
-		<div
-			v-for="item in data"
-			:key="item.id"
-			class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden"
+	<h3 class="mb-5 mt-10 font-bold">My Library</h3>
+	<div class="relative">
+		<span
+			class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
+			>></span
 		>
-			<img
-				v-if="bookData.find((x) => x.id == item.bookId)"
-				class="w-full group-hover:opacity-50 transition"
-				:src="
-					bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
-						.smallThumbnail
-				"
-				alt="Title"
-			/>
-			<span
-				title="Remove Book"
-				class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
-			>
-				X
-			</span>
+		<div class="bg-light-200 w-full p-5 flex rounded overflow-x-auto">
+			<div class="flex flex-nowrap space-x-5">
+				<div
+					v-for="item in data"
+					:key="item.id"
+					class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out"
+				>
+					<img
+						v-if="bookData.find((x) => x.id == item.bookId)"
+						class="w-full group-hover:opacity-50 transition"
+						:src="
+							bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
+								.thumbnail
+						"
+						:title="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
+						:alt="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
+					/>
+					<span
+						@click="removeBook(item)"
+						title="Remove Book"
+						class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
+					>
+						X
+					</span>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -45,6 +58,8 @@ import getUser from "../composables/getUser";
 import { db } from "../firebase/config";
 import {
 	collection,
+	doc,
+	deleteDoc,
 	onSnapshot,
 	query,
 	where,
@@ -127,20 +142,18 @@ export default {
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Get Single Doc
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Add
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Delete
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		const removeBook = async (item) => {
+			// remove from db
+			await deleteDoc(doc(db, "usersBooksRecords", item.id));
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Update
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// remove from local array
+			const index = data.value.indexOf(item);
+			if (index > -1) {
+				data.value.splice(index, 1);
+			}
+		};
 
 		return {
 			data,
@@ -148,6 +161,7 @@ export default {
 			loading,
 			fetchError,
 			user,
+			removeBook,
 		};
 	},
 };

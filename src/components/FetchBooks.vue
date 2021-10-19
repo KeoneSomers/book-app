@@ -2,7 +2,7 @@
 	<div class="flex flex-col items-center justify-center w-full py-10">
 		<!-- search bar -->
 
-		<div class="flex w-full pb-5 justify-center">
+		<!-- <div class="flex w-full pb-5 justify-center">
 			<div>
 				<input
 					v-model="searchQuery"
@@ -13,7 +13,7 @@
 					placeholder="Find book by title"
 				/>
 			</div>
-		</div>
+		</div> -->
 
 		<div
 			v-if="!loading && data && data.length"
@@ -39,18 +39,18 @@
 					/>
 				</div>
 				<div class="flex flex-col items-start ml-4">
-					<h4 class="text-xl font-semibold text-left">
-						{{ book.volumeInfo.title }}
-					</h4>
-					<p class="text-sm text-left max-h-10 overflow-hidden">
-						Some text
+					<router-link class="underline" :to="'/book-details/' + book.id"
+						><h4 class="text-xl font-semibold text-left">
+							{{ book.volumeInfo.title }}
+						</h4></router-link
+					>
+					<p
+						v-if="book.volumeInfo.authors"
+						class="text-sm text-left max-h-10 overflow-hidden"
+					>
+						By {{ book.volumeInfo.authors[0] }}
 					</p>
 					<div class="flex flex-row space-x-1">
-						<router-link
-							class="p-2 leading-none rounded font-medium mt-3 bg-gray-200 text-xs uppercase"
-							:to="'/book-details/' + book.id"
-							>Details</router-link
-						>
 						<button
 							@click="addBookToCollection(book)"
 							class="p-2 leading-none rounded font-medium mt-3 bg-yellow-200 text-xs uppercase"
@@ -70,22 +70,24 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUpdated, watch } from "vue";
 import getUser from "../composables/getUser";
 import axios from "axios";
 import { db } from "../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
+import { useRoute } from "vue-router";
 
 export default {
 	name: "Posts",
 	props: {},
 	setup() {
+		const route = useRoute();
 		const data = ref(null);
 		const booksAlreadyInCollection = ref([]);
 
 		const loading = ref(true);
 		const fetchError = ref(null);
-		const searchQuery = ref("The hobbit");
+		const searchQuery = ref(null);
 		const { user } = getUser();
 
 		const addBookToCollection = async (book) => {
@@ -104,7 +106,7 @@ export default {
 			return axios
 				.get(
 					"https://www.googleapis.com/books/v1/volumes?q=" +
-						searchQuery.value +
+						route.params.query +
 						"&key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0"
 				)
 				.then(function(response) {

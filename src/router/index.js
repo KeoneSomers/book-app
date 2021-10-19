@@ -59,7 +59,7 @@ const routes = [
 		beforeEnter: requireAuth,
 	},
 	{
-		path: "/explore",
+		path: "/explore/:query",
 		name: "Explore",
 		component: Explore,
 		beforeEnter: requireAuth,

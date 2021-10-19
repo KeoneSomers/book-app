@@ -34,13 +34,13 @@
 					<li>
 						<router-link
 							to="/"
-							aria-label="Our product"
-							title="Our product"
+							aria-label="Home"
+							title="Home"
 							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-							>Home</router-link
+							>My Books</router-link
 						>
 					</li>
-					<li>
+					<!-- <li>
 						<router-link
 							to="/explore"
 							aria-label="explore"
@@ -48,8 +48,8 @@
 							class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
 							>Explore</router-link
 						>
-					</li>
-					<li>
+					</li> -->
+					<!-- <li>
 						<a
 							href="/communities"
 							aria-label="Product pricing"
@@ -57,9 +57,17 @@
 							class="font-medium tracking-wide text-gray-200 transition-colors duration-200 hover:text-deep-purple-accent-400"
 							>Communities (soon)</a
 						>
-					</li>
+					</li> -->
 				</ul>
 			</div>
+			<input
+				v-model="searchQuery"
+				@keyup.enter="search()"
+				spellcheck="false"
+				type="text"
+				class=" rounded-lg border-transparent flex-1 max-w-100 mx-5 appearance-none border border-gray-300 w-max-100 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+				placeholder="Search Books"
+			/>
 			<ul v-if="user" class="flex items-center hidden space-x-8 lg:flex">
 				<li>
 					<p>Welcome back, {{ user.displayName }}</p>
@@ -203,13 +211,18 @@ export default {
 		const { user } = getUser();
 		const { logout } = useLogout();
 		const router = useRouter();
+		const searchQuery = ref(null);
 
 		const handleClick = async () => {
 			await logout();
 			router.push({ name: "Welcome" });
 		};
 
-		return { handleClick, user, isMenuOpen };
+		function search() {
+			router.push("/explore/" + searchQuery.value);
+		}
+
+		return { handleClick, user, isMenuOpen, search, searchQuery };
 	},
 };
 </script>
