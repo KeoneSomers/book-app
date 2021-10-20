@@ -62,21 +62,25 @@ export default {
 			{
 				id: "1",
 				label: "My Library",
+				icon: "",
 				books: [],
 			},
 			{
 				id: "2",
 				label: "Wishlist",
+				icon: "",
 				books: [],
 			},
 			{
 				id: "3",
 				label: "To Be Read",
+				icon: "",
 				books: [],
 			},
 			{
 				id: "4",
 				label: "Finished Reading",
+				icon: "",
 				books: [],
 			},
 		]);
@@ -93,7 +97,8 @@ export default {
 		async function getMyLibraryBooks() {
 			const q = query(
 				collection(db, "usersBooksRecords"),
-				where("userId", "==", user.value.uid)
+				where("userId", "==", user.value.uid),
+				where("isWishlisted", "!=", true)
 			);
 
 			const querySnapshot = await getDocs(q);
