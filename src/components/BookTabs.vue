@@ -2,144 +2,40 @@
 	<hr class="mt-6" />
 
 	<!-- super cool bookshelf -->
-	<h3 class="mb-5 mt-10 font-bold">My Library</h3>
-	<div class="relative">
-		<span
-			class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
-			>></span
-		>
-		<div class="bg-light-200 w-full p-5 flex rounded overflow-x-auto">
-			<div class="flex flex-nowrap space-x-5">
-				<div
-					v-for="item in shelfMyLibrary"
-					:key="item.id"
-					class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out"
-				>
-					<img
-						v-if="bookData.find((x) => x.id == item.bookId)"
-						class="w-full group-hover:opacity-50 transition"
-						:src="
-							bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
-								.thumbnail
-						"
-						:title="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-						:alt="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-					/>
-					<span
-						@click="removeBook(item)"
-						title="Remove Book"
-						class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
+	<div v-for="shelf in bookcase" :key="shelf.Id">
+		<h3 class="mb-5 mt-10 font-bold">{{ shelf.label }}</h3>
+		<div class="relative">
+			<span
+				class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
+				>></span
+			>
+			<div class="bg-light-200 w-full p-5 flex rounded overflow-x-auto">
+				<div class="flex flex-nowrap space-x-5">
+					<div
+						v-for="book in shelf.books"
+						:key="book.id"
+						class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out"
 					>
-						X
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- super cool bookshelf 2 -->
-	<h3 class="mb-5 mt-10 font-bold">Wishlist</h3>
-	<div class="relative">
-		<span
-			class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
-			>></span
-		>
-		<div class="bg-light-200 w-full p-5 flex rounded overflow-x-auto">
-			<div class="flex flex-nowrap space-x-5">
-				<div
-					v-for="item in shelfWishlist"
-					:key="item.id"
-					class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out"
-				>
-					<img
-						v-if="bookData.find((x) => x.id == item.bookId)"
-						class="w-full group-hover:opacity-50 transition"
-						:src="
-							bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
-								.thumbnail
-						"
-						:title="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-						:alt="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-					/>
-					<span
-						@click="removeBook(item)"
-						title="Remove Book"
-						class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
-					>
-						X
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- super cool bookshelf 2 -->
-	<h3 class="mb-5 mt-10 font-bold">To Be Read</h3>
-	<div class="relative">
-		<span
-			class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
-			>></span
-		>
-		<div class="bg-light-200 w-full p-5 flex rounded overflow-x-auto">
-			<div class="flex flex-nowrap space-x-5">
-				<div
-					v-for="item in shelfToBeRead"
-					:key="item.id"
-					class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out"
-				>
-					<img
-						v-if="bookData.find((x) => x.id == item.bookId)"
-						class="w-full group-hover:opacity-50 transition"
-						:src="
-							bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
-								.thumbnail
-						"
-						:title="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-						:alt="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-					/>
-					<span
-						@click="removeBook(item)"
-						title="Remove Book"
-						class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
-					>
-						X
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Finished Reading -->
-	<h3 class="mb-5 mt-10 font-bold">Finished Reading</h3>
-	<div class="relative">
-		<span
-			class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
-			>></span
-		>
-		<div class="bg-light-200 w-full p-5 flex rounded overflow-x-auto">
-			<div class="flex flex-nowrap space-x-5">
-				<div
-					v-for="item in shelfFinishedReading"
-					:key="item.id"
-					class="relative rounded group w-40 h-60 bg-dark-400 hover:cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out"
-				>
-					<img
-						v-if="bookData.find((x) => x.id == item.bookId)"
-						class="w-full group-hover:opacity-50 transition"
-						:src="
-							bookData.find((x) => x.id == item.bookId).volumeInfo.imageLinks
-								.thumbnail
-						"
-						:title="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-						:alt="bookData.find((x) => x.id == item.bookId).volumeInfo.title"
-					/>
-					<span
-						@click="removeBook(item)"
-						title="Remove Book"
-						class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
-					>
-						X
-					</span>
+						<img
+							v-if="bookData.find((x) => x.id == book.bookId)"
+							class="w-full group-hover:opacity-50 transition"
+							:src="
+								bookData.find((x) => x.id == book.bookId).volumeInfo.imageLinks
+									.thumbnail
+							"
+							:title="
+								bookData.find((x) => x.id == book.bookId).volumeInfo.title
+							"
+							:alt="bookData.find((x) => x.id == book.bookId).volumeInfo.title"
+						/>
+						<span
+							@click="removeBook(book)"
+							title="Remove Book"
+							class="absolute top-2 right-2 p-1 w-9 text-center font-bold border-light-50 text-light-50 border-width-2px rounded-full bg-dark-200 opacity-0 group-hover:opacity-100"
+						>
+							X
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -162,10 +58,28 @@ import {
 
 export default {
 	setup() {
-		const shelfMyLibrary = ref([]);
-		const shelfWishlist = ref([]);
-		const shelfToBeRead = ref([]);
-		const shelfFinishedReading = ref([]);
+		const bookcase = ref([
+			{
+				id: "1",
+				label: "My Library",
+				books: [],
+			},
+			{
+				id: "2",
+				label: "Wishlist",
+				books: [],
+			},
+			{
+				id: "3",
+				label: "To Be Read",
+				books: [],
+			},
+			{
+				id: "4",
+				label: "Finished Reading",
+				books: [],
+			},
+		]);
 
 		const bookData = ref([]);
 		const loading = ref(true);
@@ -178,7 +92,7 @@ export default {
 		});
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// GET Collection - ALL book records
+		// GET Collection - ALL book records [EXAMPLE FUNCTION (not being called)]
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		async function getAllBookRecords() {
 			let results = [];
@@ -189,8 +103,6 @@ export default {
 					snapshot.docs.forEach((doc) => {
 						results.push({ ...doc.data(), id: doc.id });
 					});
-
-					shelfMyLibrary.value = results;
 				},
 				(error) => {
 					console.log("Error: ", error);
@@ -214,7 +126,7 @@ export default {
 
 			const querySnapshot = await getDocs(q);
 			querySnapshot.forEach((doc) => {
-				shelfMyLibrary.value.push({
+				bookcase.value[0].books.push({
 					...doc.data(),
 					id: doc.id,
 				});
@@ -248,17 +160,14 @@ export default {
 			await deleteDoc(doc(db, "usersBooksRecords", item.id));
 
 			// remove from local array
-			const index = shelfMyLibrary.value.indexOf(item);
+			const index = bookcase.value[0].books.indexOf(item);
 			if (index > -1) {
-				shelfMyLibrary.value.splice(index, 1);
+				bookcase.value[0].books.splice(index, 1);
 			}
 		};
 
 		return {
-			shelfMyLibrary,
-			shelfWishlist,
-			shelfToBeRead,
-			shelfFinishedReading,
+			bookcase,
 			bookData,
 			loading,
 			fetchError,
