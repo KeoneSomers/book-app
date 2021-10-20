@@ -89,9 +89,12 @@ export default {
 		const loading = ref(true);
 		const fetchError = ref(null);
 		const { user } = getUser();
+		const googleBooksAPIKey = "AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0";
+		const axios = require("axios");
 
 		onMounted(() => {
 			getMyLibraryBooks();
+			getWishlistBooks();
 		});
 
 		async function getMyLibraryBooks() {
@@ -108,10 +111,7 @@ export default {
 					id: doc.id,
 				});
 
-				// GetBookByBookId
-				const axios = require("axios");
-				const googleBooksAPIKey = "AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0";
-
+				// GetBookDataByBookId
 				axios
 					.get(
 						"https://www.googleapis.com/books/v1/volumes/" +
@@ -121,7 +121,43 @@ export default {
 					)
 					.then(function(response) {
 						// only do this if book data is not already in the array
-						bookData.value.push(response.data);
+						if (!bookData.value.some((x) => x.id == doc.data().bookId)) {
+							bookData.value.push(response.data);
+						}
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			});
+		}
+
+		async function getWishlistBooks() {
+			const q = query(
+				collection(db, "usersBooksRecords"),
+				where("userId", "==", user.value.uid),
+				where("isWishlisted", "==", true)
+			);
+
+			const querySnapshot = await getDocs(q);
+			querySnapshot.forEach((doc) => {
+				bookcase.value[1].books.push({
+					...doc.data(),
+					id: doc.id,
+				});
+
+				// GetBookDataByBookId
+				axios
+					.get(
+						"https://www.googleapis.com/books/v1/volumes/" +
+							doc.data().bookId +
+							"?key=" +
+							googleBooksAPIKey
+					)
+					.then(function(response) {
+						// only do this if book data is not already in the array
+						if (!bookData.value.some((x) => x.id == doc.data().bookId)) {
+							bookData.value.push(response.data);
+						}
 					})
 					.catch(function(error) {
 						console.log(error);
