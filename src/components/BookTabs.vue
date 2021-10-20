@@ -87,38 +87,10 @@ export default {
 		const { user } = getUser();
 
 		onMounted(() => {
-			// getAllBookRecords();
-			getUsersBookRecords();
+			getMyLibraryBooks();
 		});
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// GET Collection - ALL book records [EXAMPLE FUNCTION (not being called)]
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		async function getAllBookRecords() {
-			let results = [];
-
-			const unsub = onSnapshot(
-				collection(db, "usersBooksRecords"),
-				(snapshot) => {
-					snapshot.docs.forEach((doc) => {
-						results.push({ ...doc.data(), id: doc.id });
-					});
-				},
-				(error) => {
-					console.log("Error: ", error);
-				}
-			);
-
-			// Clean up magic
-			watchEffect((onInvalidate) => {
-				onInvalidate(() => unsub());
-			});
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// GET Shelf - My Library
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		async function getUsersBookRecords() {
+		async function getMyLibraryBooks() {
 			const q = query(
 				collection(db, "usersBooksRecords"),
 				where("userId", "==", user.value.uid)
@@ -152,9 +124,6 @@ export default {
 			});
 		}
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Delete
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		const removeBook = async (item) => {
 			// remove from db
 			await deleteDoc(doc(db, "usersBooksRecords", item.id));
