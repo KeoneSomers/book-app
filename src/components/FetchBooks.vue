@@ -97,6 +97,7 @@ export default {
 				isFinished: false,
 				isReadLater: false,
 				isReading: false,
+				isWishlisted: false,
 			});
 		};
 

@@ -4,7 +4,7 @@
 	<!-- super cool bookshelf -->
 	<div v-for="shelf in bookcase" :key="shelf.Id">
 		<h3 class="mb-5 mt-10 font-bold">{{ shelf.label }}</h3>
-		<div class="relative">
+		<div v-if="shelf.books.length > 0" class="relative">
 			<span
 				class="absolute right-0 top-30 border-width-2px font-bold border-light-50 bg-dark-200 text-light-50 -mr-5 w-10 h-10 z-50 rounded-full text-center"
 				>></span
@@ -38,6 +38,12 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div
+			v-else
+			class="w-full h-70 bg-light-200 rounded flex flex-wrap content-center border-dashed border-2 border-light-blue-300"
+		>
+			<div class="text-center w-full">This shelf is empty.</div>
 		</div>
 	</div>
 </template>
