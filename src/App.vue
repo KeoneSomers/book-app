@@ -1,6 +1,6 @@
 <template>
-	<navbar v-if="user" />
-	<router-view :key="$route.fullPath" />
+	<Navbar v-if="user" />
+	<Router-view :key="$route.fullPath" />
 </template>
 
 <script>

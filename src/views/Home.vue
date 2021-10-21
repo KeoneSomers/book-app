@@ -15,27 +15,24 @@
 			<CurrentlyReading />
 			<ReadingGoal />
 		</div>
-
-		<BookTabs />
+		<Bookcase />
 	</div>
 </template>
 
 <script>
 // @ is an alias to /src
 import getUser from "../composables/getUser";
-import HelloWorld from "@/components/HelloWorld.vue";
 import CurrentlyReading from "@/components/CurrentlyReading.vue";
 import ReadingGoal from "@/components/ReadingGoal.vue";
-import BookTabs from "@/components/BookTabs.vue";
+import Bookcase from "@/components/Bookcase.vue";
 import { ref } from "@vue/reactivity";
 
 export default {
 	name: "Home",
 	components: {
-		HelloWorld,
 		CurrentlyReading,
 		ReadingGoal,
-		BookTabs,
+		Bookcase,
 	},
 	setup() {
 		const { user } = getUser();

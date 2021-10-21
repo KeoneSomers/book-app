@@ -39,12 +39,7 @@
 				</div>
 			</div>
 		</div>
-		<div
-			v-else
-			class="w-full h-70 bg-light-200 rounded flex flex-wrap content-center border-dashed border-2 border-light-blue-300"
-		>
-			<div class="text-center w-full">This shelf is empty.</div>
-		</div>
+		<empty-shelf v-else />
 	</div>
 </template>
 
@@ -61,8 +56,10 @@ import {
 	where,
 	getDocs,
 } from "firebase/firestore";
+import EmptyShelf from "./EmptyShelf.vue";
 
 export default {
+	components: { EmptyShelf },
 	setup() {
 		const bookcase = ref([
 			{
@@ -95,12 +92,13 @@ export default {
 		const loading = ref(true);
 		const fetchError = ref(null);
 		const { user } = getUser();
-		const googleBooksAPIKey = "AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0";
+		// const googleBooksAPIKey = "AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0"; old key
+		const googleBooksAPIKey = "AIzaSyB33uX0rERjXmuqHW8YO7nTNPAo1BDxlp8";
 		const axios = require("axios");
 
 		onMounted(() => {
 			getMyLibraryBooks();
-			getWishlistBooks();
+			// getWishlistBooks();
 		});
 
 		async function getMyLibraryBooks() {
@@ -122,13 +120,14 @@ export default {
 					.get(
 						"https://www.googleapis.com/books/v1/volumes/" +
 							doc.data().bookId +
-							"?key=" +
+							"?fields=id,volumeInfo(title,imageLinks/thumbnail)&key=" +
 							googleBooksAPIKey
 					)
 					.then(function(response) {
 						// only do this if book data is not already in the array
 						if (!bookData.value.some((x) => x.id == doc.data().bookId)) {
 							bookData.value.push(response.data);
+							console.log(response.data); // volumeInfo(title,imageLinks/thumbnail)
 						}
 					})
 					.catch(function(error) {

@@ -108,7 +108,7 @@ export default {
 				.get(
 					"https://www.googleapis.com/books/v1/volumes?q=" +
 						route.params.query +
-						"&key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0"
+						"&key=AIzaSyB33uX0rERjXmuqHW8YO7nTNPAo1BDxlp8"
 				)
 				.then(function(response) {
 					// handle success

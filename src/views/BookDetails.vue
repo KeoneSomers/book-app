@@ -39,7 +39,7 @@ export default {
 			return fetch(
 				"https://www.googleapis.com/books/v1/volumes/" +
 					route.params.id +
-					"?key=AIzaSyCnxO8EeJcBwjG7aFjSw3BeA09SPNBQUD0",
+					"?key=AIzaSyB33uX0rERjXmuqHW8YO7nTNPAo1BDxlp8",
 				{
 					method: "get",
 					headers: {
